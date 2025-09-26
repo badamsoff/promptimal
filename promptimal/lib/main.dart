@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'theme/neon_theme_extension.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'theme/neon_colors.dart';
 import 'features/auth/login_screen.dart';
 import 'features/onboarding/onboarding_screen.dart';
@@ -19,6 +20,17 @@ Future<void> main() async {
 
 final _router = GoRouter(
   initialLocation: '/onboarding',
+  redirect: (context, state) {
+    final session = Supabase.instance.client.auth.currentSession;
+    final loggingIn = state.uri.toString().startsWith('/login');
+    if (session == null && !loggingIn && !state.uri.toString().startsWith('/onboarding')) {
+      return '/login';
+    }
+    if (session != null && (loggingIn || state.uri.toString().startsWith('/onboarding'))) {
+      return '/library';
+    }
+    return null;
+  },
   routes: <RouteBase>[
     GoRoute(path: '/onboarding', builder: (context, state) => const OnboardingScreen()),
     GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
