@@ -9,6 +9,7 @@ import 'features/onboarding/onboarding_screen.dart';
 import 'features/library/library_screen.dart';
 import 'features/create/create_screen.dart';
 import 'features/profile/profile_screen.dart';
+import 'features/shell/shell_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,25 +20,15 @@ Future<void> main() async {
 final _router = GoRouter(
   initialLocation: '/onboarding',
   routes: <RouteBase>[
-    GoRoute(
-      path: '/onboarding',
-      builder: (context, state) => const OnboardingScreen(),
-    ),
-    GoRoute(
-      path: '/login',
-      builder: (context, state) => const LoginScreen(),
-    ),
-    GoRoute(
-      path: '/library',
-      builder: (context, state) => const LibraryScreen(),
-    ),
-    GoRoute(
-      path: '/create',
-      builder: (context, state) => const CreateScreen(),
-    ),
-    GoRoute(
-      path: '/profile',
-      builder: (context, state) => const ProfileScreen(),
+    GoRoute(path: '/onboarding', builder: (context, state) => const OnboardingScreen()),
+    GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
+    ShellRoute(
+      builder: (context, state, child) => ShellScreen(child: child),
+      routes: [
+        GoRoute(path: '/library', builder: (context, state) => const LibraryScreen()),
+        GoRoute(path: '/create', builder: (context, state) => const CreateScreen()),
+        GoRoute(path: '/profile', builder: (context, state) => const ProfileScreen()),
+      ],
     ),
   ],
 );

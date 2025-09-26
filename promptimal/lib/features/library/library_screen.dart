@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import '../../providers/examples_provider.dart';
+import '../../widgets/neon/animated_search_bar.dart';
 
 class LibraryScreen extends ConsumerWidget {
   const LibraryScreen({super.key});
@@ -10,7 +11,16 @@ class LibraryScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final examples = ref.watch(examplesProvider);
     return Scaffold(
-      appBar: AppBar(title: const Text('Bibliothèque')),
+      appBar: AppBar(
+        title: const Text('Bibliothèque'),
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(56),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+            child: AnimatedSearchBar(onChanged: (q) {}),
+          ),
+        ),
+      ),
       body: examples.when(
         data: (items) => MasonryGridView.count(
           crossAxisCount: 2,

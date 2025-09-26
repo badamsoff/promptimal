@@ -12,6 +12,6 @@ import 'package:promptimal/main.dart';
 void main() {
   testWidgets('App renders onboarding and can navigate to login', (WidgetTester tester) async {
     await tester.pumpWidget(const PromptimalApp());
-    expect(find.textContaining('Start'), findsOneWidget);
+    expect(find.textContaining('Commencer'), findsOneWidget);
   });
 }

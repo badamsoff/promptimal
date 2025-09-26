@@ -2,6 +2,15 @@
 
 A new Flutter project.
 
+## Setup
+
+Run:
+
+```
+flutter pub get
+flutter run
+```
+
 ## Env
 
 Create a `.env` file in project root:
