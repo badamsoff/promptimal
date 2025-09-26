@@ -2,6 +2,15 @@
 
 A new Flutter project.
 
+## Env
+
+Create a `.env` file in project root:
+
+```
+SUPABASE_URL=your_url
+SUPABASE_ANON_KEY=your_key
+```
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.

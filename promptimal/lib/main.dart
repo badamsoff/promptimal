@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'theme/neon_theme_extension.dart';
 import 'theme/neon_colors.dart';
 import 'features/auth/login_screen.dart';
 import 'features/onboarding/onboarding_screen.dart';
+import 'features/library/library_screen.dart';
+import 'features/create/create_screen.dart';
+import 'features/profile/profile_screen.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: '.env');
   runApp(const ProviderScope(child: PromptimalApp()));
 }
 
@@ -20,6 +26,18 @@ final _router = GoRouter(
     GoRoute(
       path: '/login',
       builder: (context, state) => const LoginScreen(),
+    ),
+    GoRoute(
+      path: '/library',
+      builder: (context, state) => const LibraryScreen(),
+    ),
+    GoRoute(
+      path: '/create',
+      builder: (context, state) => const CreateScreen(),
+    ),
+    GoRoute(
+      path: '/profile',
+      builder: (context, state) => const ProfileScreen(),
     ),
   ],
 );
