@@ -1,8 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../services/supabase_service.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class SettingsState {
   final bool isDarkMode;
@@ -17,17 +15,7 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
 
 final settingsProvider = StateNotifierProvider<SettingsNotifier, SettingsState>((ref) => SettingsNotifier());
 
-final supabaseInitProvider = FutureProvider<void>((ref) async {
-  final url = dotenv.env['SUPABASE_URL'] ?? '';
-  final key = dotenv.env['SUPABASE_ANON_KEY'] ?? '';
-  if (url.isEmpty || key.isEmpty) return;
-  await SupabaseService.init(url: url, anonKey: key);
-});
-
-final authStateProvider = StreamProvider<AuthState>((ref) {
-  return Supabase.instance.client.auth.onAuthStateChange.map((e) => e);
-});
-
+// Initialisation Supabase : faite dans main(), avant runApp (le routeur y accede au demarrage).
 class AuthNotifier extends StateNotifier<bool> {
   AuthNotifier() : super(false);
 

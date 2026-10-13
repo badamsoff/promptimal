@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'services/supabase_service.dart';
 import 'theme/neon_theme_extension.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'theme/neon_colors.dart';
 import 'features/auth/login_screen.dart';
 import 'features/onboarding/onboarding_screen.dart';
@@ -15,13 +15,19 @@ import 'features/shell/shell_screen.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: '.env');
+  // Supabase doit etre initialise AVANT le routeur : le redirect y accede des le demarrage.
+  final url = dotenv.env['SUPABASE_URL'] ?? '';
+  final anonKey = dotenv.env['SUPABASE_ANON_KEY'] ?? '';
+  if (url.isNotEmpty && anonKey.isNotEmpty) {
+    await SupabaseService.init(url: url, anonKey: anonKey);
+  }
   runApp(const ProviderScope(child: PromptimalApp()));
 }
 
 final _router = GoRouter(
   initialLocation: '/onboarding',
   redirect: (context, state) {
-    final session = Supabase.instance.client.auth.currentSession;
+    final session = SupabaseService.initialized ? Supabase.instance.client.auth.currentSession : null;
     final loggingIn = state.uri.toString().startsWith('/login');
     if (session == null && !loggingIn && !state.uri.toString().startsWith('/onboarding')) {
       return '/login';
