@@ -6,6 +6,7 @@ import 'services/supabase_service.dart';
 import 'theme/neon_theme_extension.dart';
 import 'theme/neon_colors.dart';
 import 'features/auth/login_screen.dart';
+import 'features/auth/signup_screen.dart';
 import 'features/onboarding/onboarding_screen.dart';
 import 'features/library/library_screen.dart';
 import 'features/create/create_screen.dart';
@@ -28,7 +29,7 @@ final _router = GoRouter(
   initialLocation: '/onboarding',
   redirect: (context, state) {
     final session = SupabaseService.initialized ? Supabase.instance.client.auth.currentSession : null;
-    final loggingIn = state.uri.toString().startsWith('/login');
+    final loggingIn = state.uri.toString().startsWith('/login') || state.uri.toString().startsWith('/signup');
     if (session == null && !loggingIn && !state.uri.toString().startsWith('/onboarding')) {
       return '/login';
     }
@@ -40,6 +41,7 @@ final _router = GoRouter(
   routes: <RouteBase>[
     GoRoute(path: '/onboarding', builder: (context, state) => const OnboardingScreen()),
     GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
+    GoRoute(path: '/signup', builder: (context, state) => const SignupScreen()),
     ShellRoute(
       builder: (context, state, child) => ShellScreen(child: child),
       routes: [
